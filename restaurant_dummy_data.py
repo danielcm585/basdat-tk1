@@ -2,6 +2,7 @@ import sys
 import random
 import requests
 import re
+from random_address import real_random_address
 
 sys.stdin = open('transaction_actors_emails.txt','r')
 
@@ -18,26 +19,29 @@ for i in range(5):
     category = input()
     categories.append(category)
 
-resp = requests.get('https://api.fungenerators.com/name/generate?category=restaurant&limit=40')
-data = resp.json()
-names = data.get('contents').get('names')
+sys.stdin = open('restaurant_names.txt','r')
+
+names = []
+for i in range(40):
+    name = input()
+    names.append(name)
 
 print("insert into restaurant values")
 for i in range(40):
-    resp = requests.get('https://api.fungenerators.com/identity/person')
+    resp = requests.get('https://api.namefake.com/')
     data = resp.json()
-    print(data)
-    
-    phone = data.get('contents').get('phone')
+
+    phone = data.get('phone_h')
     phone = re.sub(r'[^0-9]','',phone)[:15]
 
-    street = data.get('contents').get('address').get('address')
-    district = data.get('contents').get('address').get('state')
-    city = data.get('contents').get('address').get('city')
-    province = data.get('contents').get('address').get('state')
+    address = real_random_address()
+    street = address.get('address1')
+    district = address.get('state')
+    city = address.get('city')
+    province = address.get('state')
     rating = random.choice(range(11))
     category = random.choice(categories)
 
     name = names[i]
 
-    print(f"('{names}','{city}','{random.choice(emails)}','{phone}','{street}','{district}','{city}','{province}','{rating}','{category}'),")
+    print(f"('{name}','{city}','{random.choice(emails)}','{phone}','{street}','{district}','{city}','{province}','{rating}','{category}'),")
