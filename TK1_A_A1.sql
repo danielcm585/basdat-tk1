@@ -338,6 +338,8 @@ insert into customer values
   ('Orpha_Leannon@gmail.com',’20/01/1991’,’L’),
   ('Mr._Karl@gmail.com',’11/11/1998’,’L’);
 
+TODO: 
+
 insert into ingredient values
   ('0000000000000000000000000','fennel seed'),
   ('0000000000000000000000001','garlic powder'),
