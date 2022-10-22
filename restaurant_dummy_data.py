@@ -12,12 +12,10 @@ for i in range(20):
     email = transaction_actor[2:].split("'")[0]
     emails.append(email)
 
-sys.stdin = open('restaurant_categories.txt','r')
-
 categories = []
 for i in range(5):
-    category = input()
-    categories.append(category)
+    category_id = str(i).rjust(20,'0')
+    categories.append(category_id)
 
 sys.stdin = open('restaurant_names.txt','r')
 
