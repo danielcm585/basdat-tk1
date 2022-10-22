@@ -1,0 +1,148 @@
+1. Grapefruit and egg ciabatta
+
+Warm ciabatta filled with pink grapefruit and free range eggs
+
+flour | yeast | water | salt | sugar | oil | grapefruit | egg
+2. Anise and crab korma
+
+Creamy korma made with fresh anise and crab
+
+onion | peppers | garlic | ginger | tumeric | cumin | coriander | butter | sugar | cream | anise | crab
+3. Squirrel and thai basil salad
+
+Squirrel and fresh thai basil served on a bed of lettuce
+
+lettuce | squirrel | thai basil
+4. Lamb and shrimp soup
+
+Minced lamb and shrimp combined into smooth soup
+
+onion | lamb | shrimp
+5. Banana and thyme pancake
+
+Crispy pancake filled with fresh banana and thyme
+
+flour | butter | egg | milk | banana | thyme
+6. Chicken and squash skewers
+
+Bamboo skewers loaded with corn-fed chicken and pattypan squash
+
+onions | chicken | squash
+7. Blueberry and pear pancake
+
+Crispy pancake filled with fresh blueberry and juicy pears
+
+flour | butter | egg | milk | blueberry | pear
+8. Okra and anise stir fry
+
+Crunchy stir fry featuring fresh okra and anise
+
+garlic | okra | anise
+9. Plumcot and pollack salad
+
+Fresh plumcot and pollack served on a bed of lettuce
+
+lettuce | plumcot | pollack
+10. Aubergine and spinach dumplings
+
+Thin pastry cases stuffed with marinaded aubergine and baby spinach
+
+flour | water | salt | onions | aubergine | spinach
+11. Bacon and pepper spaghetti
+
+Spagetti topped with a blend of thick bacon and fresh pepper
+
+tomato | passata | onion | garlic | spagetti | oregano | black pepper | bacon | pepper
+12. Squash and karengo soup
+
+Acorn squash and karengo combined into creamy soup
+
+garlic | squash | karengo | cream
+13. Tomato and bean soup
+
+Beef tomatoes and bean combined into chunky soup
+
+garlic | tomato | bean
+14. Mortadella and hp sauce salad
+
+A crisp salad featuring mortadella and hp sauce
+
+lettuce | cucumber | white cabbage | mortadella | hp sauce
+15. Udon and juniper berry salad
+
+A crisp salad featuring udon and fresh juniper berry
+
+cucumber | cress | white cabbage | udon | juniper berry
+16. Peppercorn and pumpkin soup
+
+Black peppercorn and spiced pumpkin combined into chunky soup
+
+garlic | peppercorn | pumpkin
+17. Stilton and cider vinegar salad
+
+A crisp salad featuring stilton and cider vinegar
+
+lettuce | cucumber | white cabbage | stilton | cider vinegar
+18. Black pepper and fish ciabatta
+
+Warm ciabatta filled with crushed black pepper and fish
+
+flour | yeast | water | salt | sugar | oil | black pepper | fish
+19. Garam masala and fish gyoza
+
+Thin pastry cases stuffed with garam masala and fish
+
+flour | water | salt | onions | garam masala | fish
+20. Tofu and black pepper toastie
+
+Crisp slices of bread filled with silken tofu and crushed black pepper
+
+flour | yeast | water | salt | sugar | oil | tofu | black pepper
+21. Bacon and olive penne
+
+Fresh egg tubular pasta in a sauce made from lea bacon and olive
+
+tomato | onion | garlic | pasta | oregano | black pepper | bacon | olive
+22. Cocoa and milk pudding
+
+A rich suet pudding made with cocoa and semi-skimmed milk
+
+flour | butter | water | salt | onions | cocoa | milk
+23. Pork and tumeric vindaloo
+
+Hot vindaloo made with pork and tumeric
+
+onion | peppers | garlic | ginger | tumeric | cumin | coriander | black pepper | mustard seeds | cardamon | cinnamon | white wine vinegar | cayenne | pork
+24. Tongue and wheat bran salad
+
+Tongue and wheat bran served on a bed of lettuce
+
+lettuce | tongue | wheat bran
+25. Peach and sultana cookies
+
+Crunchy cookies made with fresh peach and sultana
+
+flour | butter | egg | sugar | peach | sultana
+26. Prune and pumpkin buns
+
+Crumbly buns made with fresh prune and spiced pumpkin
+
+flour | butter | egg | sugar | prune | pumpkin
+27. Pumpkin and pepper curry
+
+Spicy curry made with spiced pumpkin and baby pepper
+
+onion | peppers | garlic | ginger | tumeric | cumin | coriander | curry leaf | green chilli | pumpkin | pepper
+28. Rosemary and squash buns
+
+Moist buns made with fresh rosemary and pattypan squash
+
+flour | butter | egg | sugar | rosemary | squash
+29. Borscht and feta soup
+
+Borscht and tangy feta combined into chunky soup
+
+onion | borscht | feta
+30. Leek and sausage pasta
+
+Fresh egg pasta in a sauce made from frizzled leek and Cumberland sausage
