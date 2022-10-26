@@ -1,0 +1,10 @@
+('michael@gmail.com','2022-03-21 13:23:44','The Jazz Parlour','Washington','Grapefruit and egg ciabatta',5,''),
+('kevin@gmail.com', '2022-12-23 13:21:44','Bounty','Fayetteville','Anise and crab korma',12,'Extra sauce please'),
+('dickinson@gmail.com', '2022-11-24 13:22:44,'Carnival','Glendale','Squirrel and thai basil salad',8,'Less sugar'),
+('jessica@gmail.com', '2022-10-25 13:26:44','The Boiling Dairy','Savannah','Lamb and shrimp soup',12,'No chili'),
+('jason@gmail.com', '2022-09-26 13:27:44','Steam','Fayetteville','Banana and thyme pancake',9,'No chili'),
+('josh@gmail.com','2022-08-27 14:23:44','Bambino','Oklahoma City','Chicken and squash skewers',0,'Less sugar'),
+('steven@gmail.com','2022-07-28 15:23:44','The Sweet Pig','Nashville','Blueberry and pear pancake',8,'Extra sauce please'),
+('cheryl@gmail.com','2022-06-29 16:23:44','Splash','Anchorage','Okra and anise stir fry',6,'No chili'),
+('michelle@gmail.com','2022-05-11 17:23:44','Streetwise','Montgomery','Plumcot and pollack salad',8,'Extra sauce please'),
+('juan@gmail.com','2022-04-12 18:23:44','The Glass Grill','Hartland','Aubergine and spinach dumplings',10,'Less sugar');

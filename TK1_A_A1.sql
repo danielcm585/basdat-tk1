@@ -1,8 +1,8 @@
 create schema tk1_a1;
 
 set search_path to tk1_a1;
-
-create table user (
+ 
+create table tk1_a1.user (
 	email varchar(50) not null,
   password varchar(50) not null,
   phonenum varchar(20) not null,
@@ -10,11 +10,11 @@ create table user (
   lname varchar(14) not null,
   primary key (email)
 );
-
+ 
 create table admin (
 	email varchar(50) not null,
   primary key (email),
-  foreign key (email) references user (email) on delete cascade on update cascade
+  foreign key (email) references tk1_a1.user (email) on delete cascade on update cascade
 );
 
 create table transaction_actor(
@@ -25,18 +25,18 @@ create table transaction_actor(
 	restopay varchar(20) default 0,
 	adminid varchar(50) not null,
   primary key (email),
-  foreign key (email) references user (email) on delete cascade on update cascade,
-  foreign key (adminid) references admin (email) on delete cascade on update cascade
+  foreign key (email) references tk1_a1.user (email) on delete cascade on update cascade,
+  foreign key (adminid) references tk1_a1.admin (email) on delete cascade on update cascade
 );
 
 CREATE TABLE COURIER (
-		email varchar(50) not null,
-		platenum varchar(10) not null,
-		drivinglicensenum varchar(20) not null,
-		vechicletype varchar(15) not null,
-		vehiclebrand varchar(15) not null,
-		PRIMARY KEY (email),
-		FOREIGN KEY (email) REFERENCES TRANSACTION_ACTOR(email) ON UPDATE CASCADE ON DELETE CASCADE
+  email varchar(50) not null,
+  platenum varchar(10) not null,
+  drivinglicensenum varchar(20) not null,
+  vechicletype varchar(15) not null,
+  vehiclebrand varchar(15) not null,
+  PRIMARY KEY (email),
+  FOREIGN KEY (email) REFERENCES TRANSACTION_ACTOR(email) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 create table customer (
@@ -46,13 +46,13 @@ create table customer (
   primary key (email),
   foreign key (email) references transaction_actor (email) on delete cascade on update cascade
 );
-
+ 
 CREATE TABLE RESTAURANT_CATEGORY(
-		id varchar(20) not null,
-		name varchar(50) not null,
-		PRIMARY KEY (id)
+  id varchar(20) not null,
+  name varchar(50) not null,
+  PRIMARY KEY (id)
 );
-
+ 
 create table restaurant (
 	rname varchar(25) not null,
   rbranch varchar(25) not null,
@@ -95,38 +95,38 @@ create table food(
 	stock varchar(15) not null,
 	price bigint not null,
 	fcategory varchar(20) not null,
-	primary key (rname, rbranch, foodname)
+	primary key (rname, rbranch, foodname),
 	foreign key (rname, rbranch) references restaurant (rname, rbranch) on delete cascade on update cascade
 );
 
 CREATE TABLE INGREDIENT(
-		id varchar(25) not null,
-		name varchar(25) not null,
-		PRIMARY KEY (id)
+  id varchar(25) not null,
+  name varchar(25) not null,
+  PRIMARY KEY (id)
 );
 
-CREATE TABLE FOOD_INGRIDIENT(
-		rname varchar(25) not null,
-		rbranch varchar(25) not null,
-		foodname varchar(50) not null,
-		ingredient varchar(25) not null,
-		PRIMARY KEY (rname),
-		FOREIGN KEY (rname) REFERENCES FOOD (rname) ON UPDATE CASCADE ON DELETE CASCADE,
-		FOREIGN KEY (rbranch) REFERENCES FOOD (rbranch) ON UPDATE CASCADE ON DELETE CASCADE,
-		FOREIGN KEY (foodname) REFERENCES FOOD (foodname) ON UPDATE CASCADE ON DELETE CASCADE,
-		FOREIGN KEY (ingredient) REFERENCES INGREDIENT (id) ON UPDATE CASCADE ON DELETE CASCADE
+CREATE TABLE FOOD_INGREDIENT(
+  rname varchar(25) not null,
+  rbranch varchar(25) not null,
+  foodname varchar(50) not null,
+  ingredient varchar(25) not null,
+  PRIMARY KEY (rname),
+  FOREIGN KEY (rname) REFERENCES FOOD (rname) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (rbranch) REFERENCES FOOD (rbranch) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (foodname) REFERENCES FOOD (foodname) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (ingredient) REFERENCES INGREDIENT (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
-
+ 
 CREATE TABLE PAYMENT_METHOD(
-		id varchar(25) not null,
-		name varchar(25) not null,
-		PRIMARY KEY (id)
+  id varchar(25) not null,
+  name varchar(25) not null,
+  PRIMARY KEY (id)
 );
-
+ 
 CREATE TABLE PAYMENT_STATUS(
-		id varchar(25) not null,
-		name varchar(25) not null,
-		PRIMARY KEY (id)
+  id varchar(25) not null,
+  name varchar(25) not null,
+  PRIMARY KEY (id)
 );
 
 create table delivery_fee_per_km(
@@ -157,37 +157,36 @@ create table transaction (
   foreign key (pmid) references payment_method (id) on delete cascade on update cascade,
   foreign key (psid) references payment_status (id) on delete cascade on update cascade,
   foreign key (dfid) references delivery_fee_per_km (id) on delete cascade on update cascade,
-  foreign key (courierid) references courier (id) on delete cascade on update cascade
+  foreign key (courierid) references courier (email) on delete cascade on update cascade
 );
 
 CREATE TABLE TRANSACTION_STATUS(
-		id varchar(25) not null,
-		name varchar(25) not null,
-		PRIMARY KEY (id)
+  id varchar(25) not null,
+  name varchar(25) not null,
+  PRIMARY KEY (id)
 );
 
 create table transaction_food(
 	email varchar(50) not null,
-	datetime datetime not null,
+	datetime timestamp not null,
 	rname varchar(25) not null,
 	rbranch varchar(25) not null,
 	foodname varchar(50) not null,
 	amount int not null,
 	note varchar(255),
-	primary key (email, datetime, rname, branch, foodname),
+	primary key (email, datetime, rname, rbranch, foodname),
 	foreign key (email, datetime) references transaction (email, datetime) on delete cascade on update cascade,
 	foreign key (rname, rbranch, foodname) references food (rname, rbranch, foodname) on delete cascade on update cascade
 );
 
 CREATE TABLE TRANSACTION_HISTORY(
-		email varchar(50) not null,
-		datetime DATETIME not null,
-		tsid varchar(25) not null,
-		datetimestatus varchar(20,
-		PRIMARY KEY (email, datetime, tsid),
-		FOREIGN KEY (email) REFERENCES TRANSACTION (email) ON UPDATE CASCADE ON DELETE CASCADE,
-		FOREIGN KEY (datetime) REFERENCES TRANSACTION_FOOD (datetime) ON UPDATE CASCADE ON DELETE CASCADE,
-		FOREIGN KEY (tsid) REFERENCES TRANSACTION_STATUS (id) ON UPDATE CASCADE ON DELETE CASCADE
+  email varchar(50) not null,
+  datetime timestamp not null,
+  tsid varchar(25) not null,
+  datetimestatus varchar(20),
+  PRIMARY KEY (email, datetime, tsid),
+  FOREIGN KEY (email,datetime) REFERENCES TRANSACTION (email,datetime) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (tsid) REFERENCES TRANSACTION_STATUS (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 create table promo (
@@ -208,22 +207,23 @@ create table min_transaction_promo (
 
 create table special_day_promo (
 	id varchar(25) not null,
-	date datetime not null,
+	date timestamp not null,
 	primary key (id),
 	foreign key (id) references promo (id) on delete cascade on update cascade
-)
-
+);
+ 
 create table restaurant_promo (
 	rname varchar(25) not null,
   rbranch varchar(25) not null,
+  foodname varchar(50) not null,
   pid varchar(25),
-  start datetime not null,
-  end datetime not null,
+  start_promo timestamp not null,
+  end_promo timestamp not null,
   primary key (rname, rbranch),
-  foreign key (rname, rbranch) references food (rname, rbranch) on delete cascade on update cascade,
+  foreign key (rname, rbranch, foodname) references food (rname, rbranch, foodname) on delete cascade on update cascade,
   foreign key (pid) references promo (id) on delete cascade on update cascade
 );
-
+ 
 \d USER
 \d ADMIN
 \d TRANSACTION_ACTOR
@@ -248,7 +248,7 @@ create table restaurant_promo (
 \d SPECIAL_DAY_PROMO
 \d RESTAURANT_PROMO
 
-insert into user values
+insert into user_acc values
   ('Tess_Labadie@gmail.com','=,Vel#Y5i0','187391110913120','Tess','Labadie'),
   ('Jayme_Murray@gmail.com','!9Tr/&;FNxUiXb$','8637811956780','Jayme','Murray'),
   ('Prof._William@gmail.com','rdN@}R\wk9^','10011556420181','Prof.','William'),
@@ -256,8 +256,8 @@ insert into user values
   ('Steve_Rogahn@gmail.com','84`Gx|(w$','6417562136','Steve','Rogahn'),
   ('Dulce_Bashirian@gmail.com','tz$i%BU_Rl.FukZL`o','7511635703','Dulce','Bashirian'),
   ('Savanna_Tillman@gmail.com','7DOM`uDz8WJNhuF%$r','6723844081','Savanna','Tillman'),
-  ('Kelton_Gorczany@gmail.com','TA?%kL'iUH^p%x3+ci)\','4981676376','Kelton','Gorczany'),
-  ('Vergie_Grimes@gmail.com','MPx^\$ZuI)I(}8.f,@mT','330600655279527','Vergie','Grimes'),
+  ('Kelton_Gorczany@gmail.com','TA?%kLiUH^p%x3+ci)','4981676376','Kelton','Gorczany'),
+  ('Vergie_Grimes@gmail.com','MPx^$ZuI)I(}8.f,@mT','330600655279527','Vergie','Grimes'),
   ('Prof._Brennon@gmail.com','4s@W0WC=CZZ','81394164654913','Prof.','Brennon'),
   ('Elfrieda_Wilderman@gmail.com','L[V%S:(Zf.c!F}zl','08037314871','Elfrieda','Wilderman'),
   ('Eula_Mayert@gmail.com','OGt:k+QNYHaP=-[','13058346522','Eula','Mayert'),
@@ -266,20 +266,20 @@ insert into user values
   ('Edyth_Lindgren@gmail.com','+FqU$VKv?{c4','7840484406','Edyth','Lindgren'),
   ('Mr._Kaleb@gmail.com','XbCj2]HaHo_GB9Rt^','06405529831','Mr.','Kaleb'),
   ('General_Brekke@gmail.com',':W(OU#&fgN#xE','934396778485938','General','Brekke'),
-  ('Ms._Adell@gmail.com','cBexgjy%'eNNs','171066371771175','Ms.','Adell'),
+  ('Ms._Adell@gmail.com','cBexgjy%eNNs','171066371771175','Ms.','Adell'),
   ('Orpha_Leannon@gmail.com','qwRj$"Z?"#{Nix','094782183032129','Orpha','Leannon'),
   ('Mr._Karl@gmail.com','js)69.WM:','7409848604604','Mr.','Karl'),
   ('Andreanne_Johnson@gmail.com','*|@421Q28m4ea:CSuV','5510849680','Andreanne','Johnson'),
   ('Prof._Darrell@gmail.com','tVGk4zM9FF','337737866307916','Prof.','Darrell'),
   ('Shaina_Barton@gmail.com',')22zg`0~@W%i!=/6','6278279372238','Shaina','Barton'),
-  ('Mr._Curt@gmail.com','[TBRjIto#'FaZH`Ri','146790602884309','Mr.','Curt'),
+  ('Mr._Curt@gmail.com','[TBRjIto#FaZH`Ri','146790602884309','Mr.','Curt'),
   ('Taya_King@gmail.com','Pa5xmusz0B7h8Zj','5984909264771','Taya','King'),
-  ('Ms._Zola@gmail.com','[6?)X*C'f:0.NA0','06123025469','Ms.','Zola'),
+  ('Ms._Zola@gmail.com','[6?)X*Cf:0.NA0','06123025469','Ms.','Zola'),
   ('Curt_Schneider@gmail.com','0_9g*H0v[FE','8731439350273','Curt','Schneider'),
   ('Jovani_Ernser@gmail.com','KuDSG_-+h','1624654063684','Jovani','Ernser'),
-  ('Prof._Maddison@gmail.com','\8l8,Q$7Pq,N;K-IAB','5279956558290','Prof.','Maddison'),
+  ('Prof._Maddison@gmail.com','8l8,Q$7Pq,N;K-IAB','5279956558290','Prof.','Maddison'),
   ('Soledad_Doyle@gmail.com','v1_K9;5FkhV0{','232808755497898','Soledad','Doyle');
-
+ 
 insert into admin values
   ('Tess_Labadie@gmail.com'),
   ('Jayme_Murray@gmail.com'),
@@ -288,57 +288,252 @@ insert into admin values
   ('Steve_Rogahn@gmail.com');
 
 insert into transaction_actor values
-  ('Tess_Labadie@gmail.com',’9598152786155006’,’BCA’,’AP001’,’1000’,’'Steve_Rogahn@gmail.com'),
-  ('Jayme_Murray@gmail.com',’4099051481435243’,’BNI’,’AP002’,’2500’,’Hector_Gerlach@gmail.com'),
-  ('Prof._William@gmail.com',’6359075340969926’,’Mandiri’,’AP003’,’5000’,’Prof._William@gmail.com'),
-  ('Hector_Gerlach@gmail.com’,’2504404782329784’,’BRI’,’AP004’,’7500’,’Jayme_Murray@gmail.com'),
-  ('Steve_Rogahn@gmail.com',’2391967585323301’,	‘BRI’,’BR001’,’3000’,’Tess_Labadie@gmail.com'),
-  ('Dulce_Bashirian@gmail.com',’9018344908528880’,’Mandiri’,’BR002’,’12500’,’Tess_Labadie@gmail.com'),
-  ('Savanna_Tillman@gmail.com',’3324396477521421’,’BNI’,’BR003’,’14000’,’Jayme_Murray@gmail.com'),
-  ('Kelton_Gorczany@gmail.com',’3537085869758208’,’BCA’,’BR004’,’11500’,’Jayme_Murray@gmail.com'),
-  ('Vergie_Grimes@gmail.com',’9816226837961717’,’Mandiri’,’MT001’,’8000’,’Prof._William@gmail.com'),
-  ('Prof._Brennon@gmail.com',’1373111413809307’,’BNI’,’MT002’,’15000’,’Hector_Gerlach@gmail.com'),
-  ('Elfrieda_Wilderman@gmail.com',’2223509872730385’,’BRI’,’MT003’,’9000’,’Steve_Rogahn@gmail.com'),
-  ('Eula_Mayert@gmail.com',’1723561993508037’,’BCA’,’MT004’,’17000’,’Tess_Labadie@gmail.com'),
-  ('Hosea_Swaniawski@gmail.com',’3407707125351288’,’BRI’,’RB001’,’20500’,’Jayme_Murray@gmail.com'),
-  ('Veda_Watsica@gmail.com',’1663046385997304’,’Mandiri’,’RB002’,’22000’,’Prof._William@gmail.com'),
-  ('Edyth_Lindgren@gmail.com',’3110181921568232’,’BNI’,’RB003’,’21000’,’Hector_Gerlach@gmail.com'),
-  ('Mr._Kaleb@gmail.com',’3059891267826887’,’BRI’,’RB004’,’16500’,’Steve_Rogahn@gmail.com'),
-  ('General_Brekke@gmail.com',’7012213860777765’,’BNI’,’RM001’,’16000’,’Tess_Labadie@gmail.com'),
-  ('Ms._Adell@gmail.com',’2340615048226353’,’BCA’,’RM002’,’34000’,’Jayme_Murray@gmail.com'),
-  ('Orpha_Leannon@gmail.com',’0797607930131113’,’Mandiri’,’RM003’,’1500’,’Prof._William@gmail.com'),
-  ('Mr._Karl@gmail.com',’5745855617446235’,’BRI’,’RM004’,’9500’,’Hector_Gerlach@gmail.com');
-
+  ('Tess_Labadie@gmail.com','9598152786155006','BCA','AP001','1000','Steve_Rogahn@gmail.com'),
+  ('Jayme_Murray@gmail.com','4099051481435243','BNI','AP002','2500','Hector_Gerlach@gmail.com'),
+  ('Prof._William@gmail.com','6359075340969926','Mandiri','AP003','5000','Prof._William@gmail.com'),
+  ('Hector_Gerlach@gmail.com','2504404782329784','BRI','AP004','7500','Jayme_Murray@gmail.com'),
+  ('Steve_Rogahn@gmail.com','2391967585323301',	'BRI','BR001','3000','Tess_Labadie@gmail.com'),
+  ('Dulce_Bashirian@gmail.com','9018344908528880','Mandiri','BR002','12500','Tess_Labadie@gmail.com'),
+  ('Savanna_Tillman@gmail.com','3324396477521421','BNI','BR003','14000','Jayme_Murray@gmail.com'),
+  ('Kelton_Gorczany@gmail.com','3537085869758208','BCA','BR004','11500','Jayme_Murray@gmail.com'),
+  ('Vergie_Grimes@gmail.com','9816226837961717','Mandiri','MT001','8000','Prof._William@gmail.com'),
+  ('Prof._Brennon@gmail.com','1373111413809307','BNI','MT002','15000','Hector_Gerlach@gmail.com'),
+  ('Elfrieda_Wilderman@gmail.com','2223509872730385','BRI','MT003','9000','Steve_Rogahn@gmail.com'),
+  ('Eula_Mayert@gmail.com','1723561993508037','BCA','MT004','17000','Tess_Labadie@gmail.com'),
+  ('Hosea_Swaniawski@gmail.com','3407707125351288','BRI','RB001','20500','Jayme_Murray@gmail.com'),
+  ('Veda_Watsica@gmail.com','1663046385997304','Mandiri','RB002','22000','Prof._William@gmail.com'),
+  ('Edyth_Lindgren@gmail.com','3110181921568232','BNI','RB003','21000','Hector_Gerlach@gmail.com'),
+  ('Mr._Kaleb@gmail.com','3059891267826887','BRI','RB004','16500','Steve_Rogahn@gmail.com'),
+  ('General_Brekke@gmail.com','7012213860777765','BNI','RM001','16000','Tess_Labadie@gmail.com'),
+  ('Ms._Adell@gmail.com','2340615048226353','BCA','RM002','34000','Jayme_Murray@gmail.com'),
+  ('Orpha_Leannon@gmail.com','0797607930131113','Mandiri','RM003','1500','Prof._William@gmail.com'),
+  ('Mr._Karl@gmail.com','5745855617446235','BRI','RM004','9500','Hector_Gerlach@gmail.com');
+ 
 insert into courier values
   ('Hector_Gerlach@gmail.com','BPKJ07','00000000000003','Toyota Rav4 Le','Toyota'),
   ('Savanna_Tillman@gmail.com','F91LGN','00000000000006','Acura Rdx ','Acura'),
   ('Kelton_Gorczany@gmail.com','4HQN216','00000000000007','Honda Civic Lx','Honda'),
-  ('Vergie_Grimes@gmail.com','DCK7853','00000000000008','Chevrolet Sonic Lt','Chevrolet'),
+  ('Vergie_Grimes@gmail.com','DCK7853','00000000000008','Chevrolet Sonic','Chevrolet'),
   ('Eula_Mayert@gmail.com','5RIN076','00000000000011','Ford Explorer','Ford');
 
 insert into customer values
-  ('Tess_Labadie@gmail.com',’05/06/1986’,’P’),
-  ('Jayme_Murray@gmail.com','02/03/1989’,’L’),
-  ('Prof._William@gmail.com',’12/04/1983’,’L’),
-  ('Hector_Gerlach@gmail.com’,’14/06/1998’,’L’),
-  ('Steve_Rogahn@gmail.com',’09/08/1994’,’L’),
-  ('Dulce_Bashirian@gmail.com',’19/07/1988’,’L’),
-  ('Savanna_Tillman@gmail.com',’17/12/1999’,’P’),
-  ('Kelton_Gorczany@gmail.com',’24/08/1995’,’L’),
-  ('Vergie_Grimes@gmail.com',’06/05/1984’,’P’),
-  ('Prof._Brennon@gmail.com',’08/05/2002’,’L’),
-  ('Elfrieda_Wilderman@gmail.com',’12/06/1985’,’P’),
-  ('Eula_Mayert@gmail.com',’09/08/1983’,’P’),
-  ('Hosea_Swaniawski@gmail.com',’18/08/1991’,’P’),
-  ('Veda_Watsica@gmail.com',’04/08/1986’,’P’),
-  ('Edyth_Lindgren@gmail.com',’06/08/1999’,’P’),
-  ('Mr._Kaleb@gmail.com',’15/01/2000’,’L’),
-  ('General_Brekke@gmail.com',’30/08/1997’,’L’),
-  ('Ms._Adell@gmail.com',’30/11/1989’,’P’),
-  ('Orpha_Leannon@gmail.com',’20/01/1991’,’L’),
-  ('Mr._Karl@gmail.com',’11/11/1998’,’L’);
+  ('Tess_Labadie@gmail.com','05/06/1986','P'),
+  ('Jayme_Murray@gmail.com','02/03/1989','L'),
+  ('Prof._William@gmail.com','12/04/1983','L'),
+  ('Hector_Gerlach@gmail.com','14/06/1998','L'),
+  ('Steve_Rogahn@gmail.com','09/08/1994','L'),
+  ('Dulce_Bashirian@gmail.com','19/07/1988','L'),
+  ('Savanna_Tillman@gmail.com','17/12/1999','P'),
+  ('Kelton_Gorczany@gmail.com','24/08/1995','L'),
+  ('Vergie_Grimes@gmail.com','06/05/1984','P'),
+  ('Prof._Brennon@gmail.com','08/05/2002','L'),
+  ('Elfrieda_Wilderman@gmail.com','12/06/1985','P'),
+  ('Eula_Mayert@gmail.com','09/08/1983','P'),
+  ('Hosea_Swaniawski@gmail.com','18/08/1991','P'),
+  ('Veda_Watsica@gmail.com','04/08/1986','P'),
+  ('Edyth_Lindgren@gmail.com','06/08/1999','P'),
+  ('Mr._Kaleb@gmail.com','15/01/2000','L'),
+  ('General_Brekke@gmail.com','30/08/1997','L'),
+  ('Ms._Adell@gmail.com','30/11/1989','P'),
+  ('Orpha_Leannon@gmail.com','20/01/1991','L'),
+  ('Mr._Karl@gmail.com','11/11/1998','L');
+ 
+insert into customer values
+  ('Tess_Labadie@gmail.com','1991-06-03','F),
+  ('Jayme_Murray@gmail.com','1970-02-27','F),
+  ('Prof._William@gmail.com','1993-05-17','F),
+  ('Hector_Gerlach@gmail.com','2504404782329784','BRI','AP004','7500','Jayme_Murray@gmail.com','2007-01-27','F),
+  ('Steve_Rogahn@gmail.com','1997-12-13','F),
+  ('Dulce_Bashirian@gmail.com','1998-02-01','F),
+  ('Savanna_Tillman@gmail.com','1979-04-17','F),
+  ('Kelton_Gorczany@gmail.com','1984-08-26','M),
+  ('Vergie_Grimes@gmail.com','1981-09-23','F),
+  ('Prof._Brennon@gmail.com','2007-05-08','M),
+  ('Elfrieda_Wilderman@gmail.com','2000-10-02','M),
+  ('Eula_Mayert@gmail.com','1988-09-10','M),
+  ('Hosea_Swaniawski@gmail.com','1981-06-21','M),
+  ('Veda_Watsica@gmail.com','1995-11-24','M),
+  ('Edyth_Lindgren@gmail.com','1995-09-15','F),
+  ('Mr._Kaleb@gmail.com','1988-12-07','M),
+  ('General_Brekke@gmail.com','2003-05-01','F),
+  ('Ms._Adell@gmail.com','1989-08-08','F),
+  ('Orpha_Leannon@gmail.com','2006-01-09','F),
+  ('Mr._Karl@gmail.com','1992-08-28','F);
+ 
+insert into restaurant_category values
+  ('00000000000000000000','Japanese'),
+  ('00000000000000000001','Western'),
+  ('00000000000000000002','Chinese'),
+  ('00000000000000000003','Indian'),
+  ('00000000000000000004','Vietnamese');
 
-TODO: 
+insert into restaurant values
+  ('Harlequin','Louisville','Tess_Labadie@gmail.com','106247838632919','14206 James Rees Way','KY','Louisville','KY','4','00000000000000000000'),
+  ('The King''s Empress','Fayetteville','Ms._Adell@gmail.com','16908104443210','103 MLK Junior Boulevard','AR','Fayetteville','AR','1','00000000000000000003'),
+  ('The Eastern Mockingbird','Fayetteville','Hosea_Swaniawski@gmail.com','6821572724','201 North Locust Avenue','AR','Fayetteville','AR','5','00000000000000000001'),
+  ('The Shining Way','Washington','Kelton_Gorczany@gmail.com','199532973539286','6262 29th Street Northwest','DC','Washington','DC','10','00000000000000000003'),
+  ('The Underwater Garden','Manchester','Veda_Watsica@gmail.com','3514009802685','397 North Main Street','CT','Manchester','CT','3','00000000000000000001'),
+  ('The Japanese Bites','Panama City','Edyth_Lindgren@gmail.com','3539088768760','235 Hugh Thomas Drive','FL','Panama City','FL','8','00000000000000000001'),
+  ('The Bamboo Road','Port Wentworth','Ms._Adell@gmail.com','02553967571','64 Roseberry Circle','GA','Port Wentworth','GA','1','00000000000000000000'),
+  ('The Pink Rooftop','Woburn','Mr._Kaleb@gmail.com','106158275883624','78 School Street','MA','Woburn','MA','4','00000000000000000002'),
+  ('Oddity','Manchester','Savanna_Tillman@gmail.com','1736890390153','35 Lakewood Circle South','CT','Manchester','CT','8','00000000000000000000'),
+  ('The Court Door','Nashville','Steve_Rogahn@gmail.com','4371025246','2008 Ashton Avenue','TN','Nashville','TN','5','00000000000000000002'),
+  ('The Jazz Parlour','Washington','Prof._Brennon@gmail.com','12165389596689','3179 18th Street Northwest','DC','Washington','DC','2','00000000000000000002'),
+  ('Bounty','Fayetteville','Edyth_Lindgren@gmail.com','4852605845','1653 Brooks Avenue','AR','Fayetteville','AR','8','00000000000000000002'),
+  ('Carnival','Glendale','Vergie_Grimes@gmail.com','4569741528','6022 West Alice Avenue','AZ','Glendale','AZ','6','00000000000000000001'),
+  ('The Boiling Dairy','Savannah','Hector_Gerlach@gmail.com','2504404782329784','103 Fenwick Village Drive','GA','Savannah','GA','8','00000000000000000000'),
+  ('Steam','Fayetteville','Veda_Watsica@gmail.com','273598107315588','4182 North Valley Lake Drive','AR','Fayetteville','AR','0','00000000000000000001'),
+  ('Bambino','Oklahoma City','Hector_Gerlach@gmail.com','2504404782329784','1842 West Park Place','OK','Oklahoma City','OK','3','00000000000000000003'),
+  ('The Sweet Pig','Nashville','Mr._Kaleb@gmail.com','178265449831502','4728 Rockland Trail','TN','Nashville','TN','1','00000000000000000003'),
+  ('Splash','Anchorage','Hosea_Swaniawski@gmail.com','6787482841','2620 West 33rd Avenue','AK','Anchorage','AK','1','00000000000000000003'),
+  ('Streetwise','Montgomery','Steve_Rogahn@gmail.com','9354235029982','5701 East Shirley Lane','AL','Montgomery','AL','2','00000000000000000000'),
+  ('The Glass Grill','Hartland','Dulce_Bashirian@gmail.com','3499271012','653 Vermont 12','VT','Hartland','VT','10','00000000000000000001'),
+  ('Recess','Moore','Prof._William@gmail.com','90935456497104','612 Penn Lane','OK','Moore','OK','10','00000000000000000001'),
+  ('Harlequin','Fountain','Elfrieda_Wilderman@gmail.com','5138162302379','17615 Center Drive','FL','Fountain','FL','7','00000000000000000004'),
+  ('Drifters','Oakhurst','Eula_Mayert@gmail.com','075199174644492','45430 Lauri Lane','CA','Oakhurst','CA','5','00000000000000000000'),
+  ('The Sailing Garden','Conway','Tess_Labadie@gmail.com','3262257441933','1405 Tolkien Drive','AR','Conway','AR','5','00000000000000000000'),
+  ('Gastrognome','Saint Johnsbury','Mr._Karl@gmail.com','873220109021496','60 Bagley Street','VT','Saint Johnsbury','VT','0','00000000000000000004'),
+  ('Roadhouse','Glendale','Elfrieda_Wilderman@gmail.com','8381759829285','7030 West Krall Street','AZ','Glendale','AZ','7','00000000000000000002'),
+  ('The Northern View','Yarmouth','Vergie_Grimes@gmail.com','15951829736692','4 Old Colony Way','MA','Yarmouth','MA','10','00000000000000000002'),
+  ('Starlight','Fayetteville','Tess_Labadie@gmail.com','84318933716069','501 West Maple Street','AR','Fayetteville','AR','9','00000000000000000002'),
+  ('The Vineyard','Berkeley','Prof._Brennon@gmail.com','1233423517779','1194 Cragmont Avenue','CA','Berkeley','CA','8','00000000000000000001'),
+  ('The Fresh Club','Norman','Hector_Gerlach@gmail.com','2504404782329784','416 South University Boulevard','OK','Norman','OK','9','00000000000000000000'),
+  ('Bones','Arvada','Hosea_Swaniawski@gmail.com','3087111381982','17794 West 77th Lane','CO','Arvada','CO','9','00000000000000000001'),
+  ('The Big Fish','Fayetteville','Kelton_Gorczany@gmail.com','2995542322','595 West 15th Street','AR','Fayetteville','AR','2','00000000000000000000'),
+  ('The Pearl','Anchorage','Hosea_Swaniawski@gmail.com','5999295176941','8841 Tempest Circle','AK','Anchorage','AK','3','00000000000000000002'),
+  ('The Electric Badger','Panama City','Veda_Watsica@gmail.com','9720558255','1804 Calhoun Avenue','FL','Panama City','FL','2','00000000000000000002'),
+  ('Carnival','Louisville','Kelton_Gorczany@gmail.com','2478602742','12002 Vanherr Drive','KY','Louisville','KY','8','00000000000000000000'),
+  ('The Light Window','Oklahoma City','Edyth_Lindgren@gmail.com','16322920047','417 West Park Place','OK','Oklahoma City','OK','8','00000000000000000002'),
+  ('Fiddler','Panama City','Prof._William@gmail.com','0696622282','1208 Lindenwood Drive','FL','Panama City','FL','8','00000000000000000000'),
+  ('The Pearl Bay','Anchorage','Hector_Gerlach@gmail.com','2504404782329784','18117 Muldrow Street','AK','Anchorage','AK','5','00000000000000000002'),
+  ('The Sumo Moment','Fayetteville','Eula_Mayert@gmail.com','4375647240','218 Shipley Alley','AR','Fayetteville','AR','10','00000000000000000003'),
+  ('Nova','Montgomery','Eula_Mayert@gmail.com','162624550793468','3951 Kimberly Street','AL','Montgomery','AL','2','00000000000000000004');
+
+insert into restaurant_operating_hours values
+  ('Harlequin','Louisville','Senin','00:00:00','12:00:00'),
+  ('The King''s Empress','Fayetteville','Selasa','2022-02-02 00:00:00','2022-02-02 12:00:00'),
+  ('The Eastern Mockingbird','Fayetteville','Rabu','2020-09-11 00:00:00','2020-09-11 12:00:00'),
+  ('The Shining Way','Washington','Kamis','2022-06-29 00:00:00','2022-06-29 12:00:00'),
+  ('The Underwater Garden','Manchester','Jumat','2020-12-03 00:00:00','2020-12-03 12:00:00'),
+  ('The Japanese Bites','Panama City',Senin','2022-09-06 00:00:00','2022-09-06 12:00:00'),
+  ('The Bamboo Road','Port Wentworth','Selasa','2021-04-29 00:00:00','2021-04-29 12:00:00'),
+  ('The Pink Rooftop','Woburn','Rabu','2022-08-13 00:00:00','2022-08-13 12:00:00'),
+  ('Oddity','Manchester','Kamis','2021-04-29 12:00:00','2021-04-30 00:00:00'),
+  ('The Court Door','Nashville','Jumat','2020-06-05 00:00:00','2020-06-05 12:00:00'),
+  ('The Jazz Parlour','Washington','Senin','2020-04-27 00:00:00','2020-04-27 12:00:00'),
+  ('Bounty','Fayetteville','Selasa','2020-11-13 00:00:00','2020-11-13 12:00:00'),
+  ('Carnival','Glendale','Rabu','2022-08-13 12:00:00','2022-08-14 00:00:00'),
+  ('The Boiling Dairy','Savannah','Kamis','2020-03-22 00:00:00','2020-03-22 12:00:00'),
+  ('Steam','Fayetteville','Jumat','2022-03-28 00:00:00','2022-03-28 12:00:00'),
+  ('Bambino','Oklahoma City','Senin','2020-10-18 00:00:00','2020-10-18 12:00:00'),
+  ('The Sweet Pig','Nashville','Selasa','2022-01-20 00:00:00','2022-01-20 12:00:00'),
+  ('Splash','Anchorage','Rabu','2022-05-26 00:00:00','2022-05-26 12:00:00'),
+  ('Streetwise','Montgomery','Kamis','2022-03-30 00:00:00','2022-03-30 12:00:00'),
+  ('The Glass Grill','Hartland','Jumat','2021-01-16 00:00:00','2021-01-16 12:00:00'),
+  ('Recess','Moore','Senin','2020-03-02 00:00:00','2020-03-02 12:00:00'),
+  ('Harlequin','Fountain','Selasa','2022-05-26 12:00:00','2022-05-27 00:00:00'),
+  ('Drifters','Oakhurst','Rabu',),
+  ('The Sailing Garden','Conway','Kamis','2020-12-03 12:00:00','2020-12-04 00:00:00'),
+  ('Gastrognome','Saint Johnsbury','Jumat','2022-09-06 12:00:00','2022-09-07 00:00:00'),
+  ('Roadhouse','Glendale','Sabtu','2021-08-13 00:00:00','2021-08-13 12:00:00'),
+  ('The Northern View','Yarmouth','Minggu','2022-09-07 00:00:00','2022-09-07 12:00:00'),
+  ('Starlight','Fayetteville','Senin','2021-12-28 00:00:00','2021-12-28 12:00:00'),
+  ('The Vineyard','Berkeley','Sabtu','2021-01-16 12:00:00','2021-01-17 00:00:00'),
+  ('The Fresh Club','Norman','Minggu','2020-11-30 00:00:00','2020-11-30 12:00:00');
+ 
+insert into food_category values
+  ('00000000000000000000','seafood'),
+  ('00000000000000000001','chinese food'),
+  ('00000000000000000002','western food'),
+  ('00000000000000000003','indonesian food'),
+  ('00000000000000000004','japanese food');
+
+insert into food values
+  ('The Jazz Parlour','Washington','Grapefruit and egg ciabatta','Warm ciabatta filled with pink grapefruit and free range eggs','7','300000.0','00000000000000000000'),
+  ('Bounty','Fayetteville','Anise and crab korma','Creamy korma made with fresh anise and crab','5','300000.0','00000000000000000000'),
+  ('Carnival','Glendale','Squirrel and thai basil salad','Squirrel and fresh thai basil served on a bed of lettuce','16','300000.0','00000000000000000000'),
+  ('The Boiling Dairy','Savannah','Lamb and shrimp soup','Minced lamb and shrimp combined into smooth soup','7','300000.0','00000000000000000000'),
+  ('Steam','Fayetteville','Banana and thyme pancake','Crispy pancake filled with fresh banana and thyme','26','300000.0','00000000000000000000'),
+  ('Bambino','Oklahoma City','Chicken and squash skewers','Bamboo skewers loaded with corn-fed chicken and pattypan squash','37','300000.0','00000000000000000000'),
+  ('The Sweet Pig','Nashville','Blueberry and pear pancake','Crispy pancake filled with fresh blueberry and juicy pears','27','700000.0','00000000000000000001'),
+  ('Splash','Anchorage','Okra and anise stir fry','Crunchy stir fry featuring fresh okra and anise','17','700000.0','00000000000000000001'),
+  ('Streetwise','Montgomery','Plumcot and pollack salad','Fresh plumcot and pollack served on a bed of lettuce','18','700000.0','00000000000000000001'),
+  ('The Glass Grill','Hartland','Aubergine and spinach dumplings','Thin pastry cases stuffed with marinaded aubergine and baby spinach','19','700000.0','00000000000000000001'),
+  ('Recess','Moore','Bacon and pepper spaghetti','Spagetti topped with a blend of thick bacon and fresh pepper','6','700000.0','00000000000000000001'),
+  ('Harlequin','Fountain','Squash and karengo soup','Acorn squash and karengo combined into creamy soup','8','700000.0','00000000000000000001'),
+  ('Drifters','Oakhurst','Tomato and bean soup','Beef tomatoes and bean combined into chunky soup','6','1600000.0','00000000000000000002'),
+  ('The Sailing Garden','Conway','Mortadella and hp sauce salad','A crisp salad featuring mortadella and hp sauce','27','1600000.0','00000000000000000002'),
+  ('Gastrognome','Saint Johnsbury','Udon and juniper berry salad','A crisp salad featuring udon and fresh juniper berry','11','1600000.0','00000000000000000002'),
+  ('Roadhouse','Glendale','Peppercorn and pumpkin soup','Black peppercorn and spiced pumpkin combined into chunky soup','30','1600000.0','00000000000000000002'),
+  ('The Northern View','Yarmouth','Stilton and cider vinegar salad','A crisp salad featuring stilton and cider vinegar','7','1600000.0','00000000000000000002'),
+  ('Starlight','Fayetteville','Black pepper and fish ciabatta','Warm ciabatta filled with crushed black pepper and fish','9','1600000.0','00000000000000000002'),
+  ('The Vineyard','Berkeley','Garam masala and fish gyoza','Thin pastry cases stuffed with garam masala and fish','22','170000.0','00000000000000000003'),
+  ('The Fresh Club','Norman','Tofu and black pepper toastie','Crisp slices of bread filled with silken tofu and crushed black pepper','14','170000.0','00000000000000000003'),
+  ('Bones','Arvada','Bacon and olive penne','Fresh egg tubular pasta in a sauce made from lea bacon and olive','25','170000.0','00000000000000000003'),
+  ('The Big Fish','Fayetteville','Cocoa and milk pudding','A rich suet pudding made with cocoa and semi-skimmed milk','12','170000.0','00000000000000000003'),
+  ('The Pearl','Anchorage','Pork and tumeric vindaloo','Hot vindaloo made with pork and tumeric','10','170000.0','00000000000000000003'),
+  ('The Electric Badger','Panama City','Tongue and wheat bran salad','Tongue and wheat bran served on a bed of lettuce','17','170000.0','00000000000000000003'),
+  ('Carnival','Louisville','Peach and sultana cookies','Crunchy cookies made with fresh peach and sultana','16','1100000.0','00000000000000000004'),
+  ('The Light Window','Oklahoma City','Prune and pumpkin buns','Crumbly buns made with fresh prune and spiced pumpkin','5','1100000.0','00000000000000000004'),
+  ('Fiddler','Panama City','Pumpkin and pepper curry','Spicy curry made with spiced pumpkin and baby pepper','13','1100000.0','00000000000000000004'),
+  ('The Pearl Bay','Anchorage','Rosemary and squash buns','Moist buns made with fresh rosemary and pattypan squash','17','1100000.0','00000000000000000004'),
+  ('The Sumo Moment','Fayetteville','Borscht and feta soup','Borscht and tangy feta combined into chunky soup','9','1100000.0','00000000000000000004'),
+  ('Nova','Montgomery','Leek and sausage pasta','Fresh egg pasta in a sauce made from frizzled leek and Cumberland sausage','8','1100000.0','00000000000000000004');
+ 
+insert into transaction_status values
+  ('0000000000000000000000000','paid'),
+  ('0000000000000000000000001','failed'),
+  ('0000000000000000000000002','verification in process'),
+  ('0000000000000000000000003','refunded'),
+  ('0000000000000000000000004','refund in process');
+
+insert into delivery_fee_per_km values
+  ('00000000000000000000','DKI Jakarta','10000'.'20000'),
+  ('00000000000000000001','DIY Yogyakarta','8000'.'15000'),
+  ('00000000000000000002','Jawa Barat','7500'.'12500'),
+  ('00000000000000000003','Jawa Tengah','8500'.'15500'),
+  ('00000000000000000004','Jawa Timur','9500'.'17500'),
+  ('00000000000000000005','Kalimantan Barat','7000'.'12000'),
+  ('00000000000000000006','Kalimantan Utara','8000'.'13000'),
+  ('00000000000000000007','Sulawesi Selatan','9000'.'25000'),
+  ('00000000000000000008','Kalimantan Tengah','12000'.'22000'),
+  ('00000000000000000009','Nanggroe Aceh Darussalam','12000'.'22000');
+
+insert into promo values
+  ('000000000000000','promoharibesar','10'),
+  ('000000000000001','promoultah','20'),
+  ('000000000000002','promokamis','15'),
+  ('000000000000003','promotanggalmerah','10'),
+  ('000000000000004','promotahunbaru','25'),
+  ('000000000000005','promolebaran','70'),
+  ('000000000000006','promotanggalkembar','80'),
+  ('000000000000007','promojam8','10'),
+  ('000000000000008','promoharijumat','15'),
+  ('000000000000009','promomakanber10','15');
+
+insert into special_day_promo values
+  ('000000000000000','2022-10-10'),
+  ('000000000000001','2022-09-09'),
+  ('000000000000002','2022-01-01'),
+  ('000000000000003','2022-02-02'),
+  ('000000000000004','2022-03-03'),
+  ('000000000000005','2022-04-04'),
+  ('000000000000006','2022-05-05'),
+  ('000000000000007','2022-06-06'),
+  ('000000000000008','2022-07-07'),
+  ('000000000000009','2022-08-08');
+
+insert into min_transaction_promo values
+  ('000000000000000','20000'),
+  ('000000000000001','35000'),
+  ('000000000000002','45000'),
+  ('000000000000003','150000'),
+  ('000000000000004','300000'),
+  ('000000000000005','500000'),
+  ('000000000000006','700000'),
+  ('000000000000007','800000'),
+  ('000000000000008','900000'),
+  ('000000000000009','1000000');
 
 insert into ingredient values
   ('0000000000000000000000000','fennel seed'),
@@ -360,5 +555,96 @@ insert into ingredient values
   ('0000000000000000000000016','cilantro'),
   ('0000000000000000000000017','zinfandel wine'),
   ('0000000000000000000000018','strawberry'),
-  ('0000000000000000000000019','cranberry'),
+  ('0000000000000000000000019','cranberry');
 
+insert into payment_method values
+  ('0000000000000000000000000','Credit card'),
+  ('0000000000000000000000001','Mobile payments'),
+  ('0000000000000000000000002','Cash'),
+  ('0000000000000000000000003','Debit cards'),
+  ('0000000000000000000000004','Electronic bank transfers');
+
+insert into payment_status values
+  ('0000000000000000000000000','Pending'),
+  ('0000000000000000000000001','Completed'),
+  ('0000000000000000000000002','Canceled');
+
+insert into restaurant_promo values
+  ('The Jazz Parlour','Washington','000000000000000','2022-10-10','2022-10-17'),
+  ('Bounty','Fayetteville','000000000000001','2022-09-09','2022-09-14'),
+  ('Carnival','Glendale','000000000000002','2022-01-01','2022-01-04'),
+  ('The Boiling Dairy','Savannah','000000000000003','2022-02-02','2022-02-05'),
+  ('Steam','Fayetteville','000000000000004','2022-03-03','2022-03-06'),
+  ('Bambino','Oklahoma City','000000000000005','2022-04-04','2022-04-07'),
+  ('The Sweet Pig','Nashville','000000000000006','2022-05-05','2022-05-08'),
+  ('Splash','Anchorage','000000000000007','2022-06-06','2022-06-09'),
+  ('Streetwise','Montgomery','000000000000008','2022-07-07','2022-07-10'),
+  ('The Glass Grill','Hartland','000000000000009','2022-08-08','2022-08-12');
+
+insert into food_ingredients values
+  ('The Jazz Parlour','Washington','Grapefruit and egg ciabatta',0000000000000000000000007),
+  ('Bounty','Fayetteville','Anise and crab korma',0000000000000000000000008),
+  ('Carnival','Glendale','Squirrel and thai basil salad',0000000000000000000000016),
+  ('The Boiling Dairy','Savannah','Lamb and shrimp soup',0000000000000000000000007),
+  ('Steam','Fayetteville','Banana and thyme pancake',0000000000000000000000014),
+  ('Bambino','Oklahoma City','Chicken and squash skewers',0000000000000000000000006),
+  ('The Sweet Pig','Nashville','Blueberry and pear pancake',0000000000000000000000013),
+  ('Splash','Anchorage','Okra and anise stir fry',0000000000000000000000008),
+  ('Streetwise','Montgomery','Plumcot and pollack salad',0000000000000000000000014),
+  ('The Glass Grill','Hartland','Aubergine and spinach dumplings',0000000000000000000000004),
+  ('Recess','Moore','Bacon and pepper spaghetti',0000000000000000000000016),
+  ('Harlequin','Fountain','Squash and karengo soup',0000000000000000000000000),
+  ('Drifters','Oakhurst','Tomato and bean soup',0000000000000000000000016),
+  ('The Sailing Garden','Conway','Mortadella and hp sauce salad',0000000000000000000000002),
+  ('Gastrognome','Saint Johnsbury','Udon and juniper berry salad',0000000000000000000000017),
+  ('Roadhouse','Glendale','Peppercorn and pumpkin soup',0000000000000000000000019),
+  ('The Northern View','Yarmouth','Stilton and cider vinegar salad',0000000000000000000000002),
+  ('Starlight','Fayetteville','Black pepper and fish ciabatta',0000000000000000000000014),
+  ('The Vineyard','Berkeley','Garam masala and fish gyoza',0000000000000000000000009),
+  ('The Fresh Club','Norman','Tofu and black pepper toastie',0000000000000000000000013),
+  ('Bones','Arvada','Bacon and olive penne',0000000000000000000000009),
+  ('The Big Fish','Fayetteville','Cocoa and milk pudding',0000000000000000000000015),
+  ('The Pearl','Anchorage','Pork and tumeric vindaloo',0000000000000000000000001),
+  ('The Electric Badger','Panama City','Tongue and wheat bran salad',0000000000000000000000006),
+  ('Carnival','Louisville','Peach and sultana cookies',0000000000000000000000010),
+  ('The Light Window','Oklahoma City','Prune and pumpkin buns',0000000000000000000000009),
+  ('Fiddler','Panama City','Pumpkin and pepper curry',0000000000000000000000005),
+  ('The Pearl Bay','Anchorage','Rosemary and squash buns',0000000000000000000000012),
+  ('The Sumo Moment','Fayetteville','Borscht and feta soup',0000000000000000000000017),
+  ('Nova','Montgomery','Leek and sausage pasta',0000000000000000000000006);
+
+insert into transaction values
+  ('Curt_Schneider@gmail.com','2022-03-21 13:23:44','Jalan Taman Apel','Kembangan','Jakarta Barat','DKI Jakarta','10','20.5','8.500','60.000','7','0000000000000000000000000','0000000000000000000000000','0000000000000000000000000','Hector_Gerlach@gmail.com'),
+  ('Eula_Mayert@gmail.com', '2022-12-23 13:21:44','Jalan Taman Anggur','Kembangan','Jakarta Barat','DKI Jakarta','9','25.5','8.500','80.000','9','0000000000000000000000001','0000000000000000000000000','0000000000000000000000000','Hector_Gerlach@gmail.com'),
+  ('Taya_King@gmail.com', '2022-11-24 13:22:44,'Jalan Taman Jeruk','Kembangan','Jakarta Barat','DKI Jakarta','11','30.5','8.500','70.000','8',''0000000000000000000000001','0000000000000000000000000','0000000000000000000000000','Hector_Gerlach@gmail.com'),
+  ('Tess_Labadie@gmail.com', '2022-10-25 13:26:44','Jalan Taman Mangga','Kembangan','Jakarta Barat','DKI Jakarta','12','40.5','8.500','90.000','7','0000000000000000000000000','0000000000000000000000000','0000000000000000000000000','Hector_Gerlach@gmail.com'),
+  ('Edyth_Lindgren@gmail.com', '2022-09-26 13:27:44','Jalan Taman Alpukat','Kembangan','Jakarta Barat','DKI Jakarta','8','45.5','8.500','80.000','8','0000000000000000000000002','0000000000000000000000000','0000000000000000000000000','Hector_Gerlach@gmail.com'),
+  ('Prof._Maddison@gmail.com','2022-08-27 14:23:44','Jalan Taman Sirsak','Kembangan','Jakarta Barat','DKI Jakarta','12','50.5','8.500','80.000','5','0000000000000000000000001','0000000000000000000000000','0000000000000000000000000','Savanna_Tillman@gmail.com').
+  ('Prof._Brennon@gmail.com','2022-07-28 15:23:44','Jalan Taman Belimbing','Kembangan','Jakarta Barat','DKI Jakarta','13','75.5','8.500','70.000','0000000000000000000000002','0000000000000000000000000','0000000000000000000000000','Savanna_Tillman@gmail.com'),
+  ('Eula_Mayert@gmail.com','2022-06-29 16:23:44','Jalan Gatot Subroto','Kembangan','Jakarta Barat','DKI Jakarta','14','15.5','8.500','80.000','9','0000000000000000000000001','0000000000000000000000000','0000000000000000000000000','Savanna_Tillman@gmail.com'),
+  ('Prof._Brennon@gmail.com','2022-05-11 17:23:44','Jalan Taman Asri','Kembangan','Jakarta Barat','DKI Jakarta','11','20.5','8.500','65.000','7','0000000000000000000000002','0000000000000000000000000','0000000000000000000000000','Savanna_Tillman@gmail.com'),
+  ('Soledad_Doyle@gmail.com','2022-04-12 18:23:44','Jalan Taman Yakult','Kembangan','Jakarta Barat','DKI Jakarta','15','35.5','8.500','85.000','6','0000000000000000000000000','0000000000000000000000000','0000000000000000000000000','Savanna_Tillman@gmail.com');
+  
+insert into transaction_food values
+  ('Taya_King@gmail.com','2022-03-21 13:23:44','The Jazz Parlour','Washington','Grapefruit and egg ciabatta',5,''),
+  ('Ms._Adell@gmail.com', '2022-12-23 13:21:44','Bounty','Fayetteville','Anise and crab korma',12,'Extra sauce please'),
+  ('Veda_Watsica@gmail.com', '2022-11-24 13:22:44,'Carnival','Glendale','Squirrel and thai basil salad',8,'Less sugar'),
+  ('Shaina_Barton@gmail.com', '2022-10-25 13:26:44','The Boiling Dairy','Savannah','Lamb and shrimp soup',12,'No chili'),
+  ('Dulce_Bashirian@gmail.com', '2022-09-26 13:27:44','Steam','Fayetteville','Banana and thyme pancake',9,'No chili'),
+  ('Elfrieda_Wilderman@gmail.com','2022-08-27 14:23:44','Bambino','Oklahoma City','Chicken and squash skewers',0,'Less sugar'),
+  ('Shaina_Barton@gmail.com','2022-07-28 15:23:44','The Sweet Pig','Nashville','Blueberry and pear pancake',8,'Extra sauce please'),
+  ('Mr._Kaleb@gmail.com','2022-06-29 16:23:44','Splash','Anchorage','Okra and anise stir fry',6,'No chili'),
+  ('Vergie_Grimes@gmail.com','2022-05-11 17:23:44','Streetwise','Montgomery','Plumcot and pollack salad',8,'Extra sauce please'),
+  ('Veda_Watsica@gmail.com','2022-04-12 18:23:44','The Glass Grill','Hartland','Aubergine and spinach dumplings',10,'Less sugar');
+ 
+insert into transaction_history values
+  ('Prof._William@gmail.com','2022-03-21 13:23:44','0000000000000000000000004','0000000000000000000000003'),
+  ('Kelton_Gorczany@gmail.com', '2022-12-23 13:21:44','0000000000000000000000002','0000000000000000000000001'),
+  ('Andreanne_Johnson@gmail.com', '2022-11-24 13:22:44,'0000000000000000000000000','0000000000000000000000001'),
+  ('Steve_Rogahn@gmail.com', '2022-10-25 13:26:44','0000000000000000000000003','0000000000000000000000001'),
+  ('Shaina_Barton@gmail.com', '2022-09-26 13:27:44','0000000000000000000000001','0000000000000000000000000'),
+  ('Elfrieda_Wilderman@gmail.com','2022-08-27 14:23:44','0000000000000000000000001','0000000000000000000000002'),
+  ('Dulce_Bashirian@gmail.com','2022-07-28 15:23:44','0000000000000000000000003','0000000000000000000000003'),
+  ('Curt_Schneider@gmail.com','2022-06-29 16:23:44','0000000000000000000000002','0000000000000000000000003'),
+  ('Soledad_Doyle@gmail.com','2022-05-11 17:23:44','0000000000000000000000004','0000000000000000000000002'),
+  ('Prof._Brennon@gmail.com','2022-04-12 18:23:44','0000000000000000000000000','0000000000000000000000003');

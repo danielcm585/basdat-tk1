@@ -1,6 +1,7 @@
 import sys
 
 sys.stdin = open('user_emails.txt','r')
+sys.stdout = open('transaction_actors_emails.txt','w')
 
 user_emails = []
 admin_emails = []
