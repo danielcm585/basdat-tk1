@@ -1,0 +1,10 @@
+('Dulce_Bashirian@gmail.com','BPKJ07','00000000000003','Toyota Rav4 Le','Toyota'),
+('Savanna_Tillman@gmail.com','F91LGN','00000000000006','Acura Rdx ','Acura'),
+('Kelton_Gorczany@gmail.com','4HQN216','00000000000007','Honda Civic Lx','Honda'),
+('Vergie_Grimes@gmail.com','DCK7853','00000000000008','Chevrolet Sonic','Chevrolet'),
+('Prof._Brennon@gmail.com','5RIN076','00000000000011','Ford Explorer','Ford'),
+('Elfrieda_Wilderman@gmail.com','A22YUX','00000000000002','Toyota Rav3 Le','Toyota'),
+('Eula_Mayert@gmail.com','B0ZCWE','00000000000012','Acura Rds ','Acura'),
+('Hosea_Swaniawski@gmail.com','S8B387','00000000000005','Honda Jazz','Honda'),
+('Veda_Watsica@gmail.com','IS1CKB','00000000000020','Chevrolet Trax','Chevrolet'),
+('Edyth_Lindgren@gmail.com','U9R9RL','00000000000017','Ford Fiesta','Ford');
