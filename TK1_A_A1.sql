@@ -13,7 +13,7 @@ primary key (email)
 create table admin (
 email varchar(50) not null,
 primary key (email),
-foreign key (email) references tk1_a1.user (email) on delete cascade on update cascade
+foreign key (email) references user_acc (email) on delete cascade on update cascade
 );
 
 create table transaction_actor(
@@ -24,8 +24,8 @@ accountno varchar(20) not null,
 restopay varchar(20) default 0,
 adminid varchar(50) not null,
 primary key (email),
-foreign key (email) references tk1_a1.user (email) on delete cascade on update cascade,
-foreign key (adminid) references tk1_a1.admin (email) on delete cascade on update cascade
+foreign key (email) references user_acc (email) on delete cascade on update cascade,
+foreign key (adminid) references admin (email) on delete cascade on update cascade
 );
 
 CREATE TABLE COURIER (
@@ -151,7 +151,7 @@ totalprice float not null,
 rating integer not null,
 pmid varchar(25) not null,
 psid varchar(25) not null,
-dfid varchar(20) not nul,
+dfid varchar(20) not null,
 courierid varchar(50) not null,
 primary key (email, datetime),
 foreign key (pmid) references payment_method (id) on delete cascade on update cascade,
@@ -224,7 +224,7 @@ foreign key (rname, rbranch, foodname) references food (rname, rbranch, foodname
 foreign key (pid) references promo (id) on delete cascade on update cascade
 );
  
-\d USER
+\d USER_ACC
 \d ADMIN
 \d TRANSACTION_ACTOR
 \d COURIER
